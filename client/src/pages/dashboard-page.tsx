@@ -92,7 +92,7 @@ function buildSpendingOverview(data: AnalyticsResponse) {
       id: 'expenses',
       name: 'Gastos',
       total: totalExpenses,
-      color: 'var(--color-chart-1)',
+      color: 'var(--color-destructive)',
     },
     {
       id: 'available',
@@ -373,7 +373,7 @@ export function DashboardPage() {
       </Card>
 
       {loadingAnalytics || !analytics ? (
-        <LoadingScreen label="Cargando analítica..." className="min-h-[320px]" />
+        <LoadingScreen label="Cargando analítica..." className="min-h-80" />
       ) : (
         <div className="space-y-6">
           <div className="grid gap-6 xl:grid-cols-2">
@@ -403,7 +403,7 @@ export function DashboardPage() {
                         <Bar
                           dataKey="expenses"
                           name="Gastos"
-                          fill="var(--color-chart-1)"
+                          fill="var(--color-destructive)"
                           radius={[10, 10, 0, 0]}
                         />
                       </BarChart>
@@ -472,9 +472,9 @@ export function DashboardPage() {
                           type="monotone"
                           dataKey="expenses"
                           name="Gastos"
-                          stroke="var(--color-chart-1)"
+                          stroke="var(--color-destructive)"
                           strokeWidth={3}
-                          dot={{ fill: 'var(--color-chart-1)' }}
+                          dot={{ fill: 'var(--color-destructive)' }}
                         />
                       </LineChart>
                     )}
@@ -485,6 +485,40 @@ export function DashboardPage() {
 
             <Card className="min-w-0 border-white/40 bg-card/90 shadow-soft">
               <CardHeader>
+                <CardTitle>Tendencia mensual de ingresos</CardTitle>
+              </CardHeader>
+              <CardContent className="h-80 min-w-0">
+                {timeline.length === 0 ? (
+                  <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                    No hay datos para mostrar
+                  </div>
+                ) : (
+                  <ChartFrame>
+                    {({ width, height }) => (
+                      <LineChart width={width} height={height} data={timeline}>
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                        <XAxis dataKey="label" {...chartAxisProps} />
+                        <YAxis {...chartAxisProps} />
+                        <Tooltip content={<ChartTooltipContent currency={summary.currency} />} />
+                        <Line
+                          type="monotone"
+                          dataKey="income"
+                          name="Ingresos"
+                          stroke="var(--color-chart-5)"
+                          strokeWidth={3}
+                          dot={{ fill: 'var(--color-chart-5)' }}
+                        />
+                      </LineChart>
+                    )}
+                  </ChartFrame>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="flex justify-center">
+            <Card className="w-full max-w-4xl border-white/40 bg-card/90 shadow-soft">
+              <CardHeader>
                 <CardTitle>Gastos vs disponible</CardTitle>
               </CardHeader>
               <CardContent className="h-80 min-w-0">
@@ -493,13 +527,15 @@ export function DashboardPage() {
                     No hay datos suficientes en este período
                   </div>
                 ) : (
-                  <ChartFrame>
+                  <ChartFrame className="mx-auto max-w-130">
                     {({ width, height }) => (
                       <PieChart width={width} height={height}>
                         <Pie
                           data={spendingOverview}
                           dataKey="total"
                           nameKey="name"
+                          cx="50%"
+                          cy="50%"
                           innerRadius={70}
                           outerRadius={110}
                           label={renderPieLabel}
@@ -520,7 +556,6 @@ export function DashboardPage() {
                 )}
               </CardContent>
             </Card>
-
           </div>
 
           <div className="grid gap-6 xl:grid-cols-2">
