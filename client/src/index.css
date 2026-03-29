@@ -1,0 +1,276 @@
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@300..800&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "Funnel Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
+  --radius: 1.25rem;
+  --color-background: #f4f8fc;
+  --color-foreground: #161925;
+  --color-card: #fbfdff;
+  --color-card-foreground: #161925;
+  --color-popover: #fbfdff;
+  --color-popover-foreground: #161925;
+  --color-primary: #23395b;
+  --color-primary-foreground: #f7fbff;
+  --color-secondary: #406e8e;
+  --color-secondary-foreground: #eff9ff;
+  --color-muted: #dde8f2;
+  --color-muted-foreground: #5d728c;
+  --color-accent: #cbf7ed;
+  --color-accent-foreground: #1f334f;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #fef2f2;
+  --color-border: #cbd8e6;
+  --color-input: #cbd8e6;
+  --color-ring: #406e8e;
+  --color-chart-1: #23395b;
+  --color-chart-2: #406e8e;
+  --color-chart-3: #8ea8c3;
+  --color-chart-4: #cbf7ed;
+  --color-chart-5: #7dd6c4;
+  --shadow-soft: 0 0 #0000;
+}
+
+:root {
+  color-scheme: light;
+  --background: #f4f8fc;
+  --foreground: #161925;
+  --card: #fbfdff;
+  --card-foreground: #161925;
+  --popover: #fbfdff;
+  --popover-foreground: #161925;
+  --primary: #23395b;
+  --primary-foreground: #f7fbff;
+  --secondary: #406e8e;
+  --secondary-foreground: #eff9ff;
+  --muted: #dde8f2;
+  --muted-foreground: #5d728c;
+  --accent: #cbf7ed;
+  --accent-foreground: #1f334f;
+  --destructive: #dc2626;
+  --border: #cbd8e6;
+  --input: #cbd8e6;
+  --ring: #406e8e;
+  --chart-1: #23395b;
+  --chart-2: #406e8e;
+  --chart-3: #8ea8c3;
+  --chart-4: #cbf7ed;
+  --chart-5: #7dd6c4;
+  --radius: 0.625rem;
+  --sidebar: #f6faff;
+  --sidebar-foreground: #161925;
+  --sidebar-primary: #23395b;
+  --sidebar-primary-foreground: #f7fbff;
+  --sidebar-accent: #cbf7ed;
+  --sidebar-accent-foreground: #1f334f;
+  --sidebar-border: #cbd8e6;
+  --sidebar-ring: #406e8e;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-background: #161925;
+  --color-foreground: #eef5ff;
+  --color-card: #1b2232;
+  --color-card-foreground: #eef5ff;
+  --color-popover: #1b2232;
+  --color-popover-foreground: #eef5ff;
+  --color-primary: #cbf7ed;
+  --color-primary-foreground: #161925;
+  --color-secondary: #8ea8c3;
+  --color-secondary-foreground: #161925;
+  --color-muted: #233047;
+  --color-muted-foreground: #aac0d6;
+  --color-accent: #406e8e;
+  --color-accent-foreground: #eef5ff;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fef2f2;
+  --color-border: rgba(142, 168, 195, 0.18);
+  --color-input: rgba(142, 168, 195, 0.18);
+  --color-ring: #8ea8c3;
+  --background: #161925;
+  --foreground: #eef5ff;
+  --card: #1b2232;
+  --card-foreground: #eef5ff;
+  --popover: #1b2232;
+  --popover-foreground: #eef5ff;
+  --primary: #cbf7ed;
+  --primary-foreground: #161925;
+  --secondary: #8ea8c3;
+  --secondary-foreground: #161925;
+  --muted: #233047;
+  --muted-foreground: #aac0d6;
+  --accent: #406e8e;
+  --accent-foreground: #eef5ff;
+  --destructive: #ef4444;
+  --border: rgba(142, 168, 195, 0.18);
+  --input: rgba(142, 168, 195, 0.18);
+  --ring: #8ea8c3;
+  --chart-1: #cbf7ed;
+  --chart-2: #8ea8c3;
+  --chart-3: #406e8e;
+  --chart-4: #7dc9e8;
+  --chart-5: #d8fbf3;
+  --sidebar: #1b2232;
+  --sidebar-foreground: #eef5ff;
+  --sidebar-primary: #cbf7ed;
+  --sidebar-primary-foreground: #161925;
+  --sidebar-accent: #233047;
+  --sidebar-accent-foreground: #eef5ff;
+  --sidebar-border: rgba(142, 168, 195, 0.18);
+  --sidebar-ring: #8ea8c3;
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen bg-background text-foreground antialiased;
+  position: relative;
+  transition:
+    background-color 240ms ease,
+    color 240ms ease,
+    border-color 240ms ease;
+}
+
+body::before {
+  content: none;
+}
+
+.dark body {
+  background-image: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 26%, white);
+  color: var(--color-foreground);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-border) 70%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-muted-foreground) 45%, transparent);
+  background-clip: content-box;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@theme inline {
+  --font-heading: "Funnel Sans", sans-serif;
+  --font-sans: "Funnel Sans", sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-balance;
+  }
+  button,
+  input,
+  textarea,
+  select,
+  [data-slot="card"],
+  [data-slot="dialog-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="popover-content"],
+  [data-slot="sheet-content"] {
+    transition:
+      background-color 220ms ease,
+      border-color 220ms ease,
+      color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    main > div {
+      animation: page-enter 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+}

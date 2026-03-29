@@ -1,0 +1,16 @@
+{
+  "name": "mi-pisto",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "npm run dev --workspace client",
+    "dev:server": "npm run start:dev --workspace server",
+    "build": "npm run build --workspace server && npm run build --workspace client",
+    "lint": "npm run lint --workspace server && npm run lint --workspace client",
+    "db:setup": "npm run db:setup --workspace server"
+  }
+}
