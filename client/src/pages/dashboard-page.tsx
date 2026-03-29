@@ -22,7 +22,13 @@ import {
 import { useAuth } from '@/context/auth-context'
 import { apiRequest, getApiErrorMessage } from '@/lib/api'
 import { getYearOptions, MONTH_OPTIONS, PAYMENT_METHOD_LABELS } from '@/lib/constants'
-import { formatCurrency, formatDate, getDateParts, getSuggestedPaymentDate } from '@/lib/format'
+import {
+  formatCurrency,
+  formatDate,
+  formatMonthLabel,
+  getDateParts,
+  getSuggestedPaymentDate,
+} from '@/lib/format'
 import type { AnalyticsResponse, DashboardResponse, Expense } from '@/types/api'
 import { ChartFrame } from '@/components/chart-frame'
 import { LoadingScreen } from '@/components/loading-screen'
@@ -45,10 +51,10 @@ function buildTimeline(data: AnalyticsResponse) {
   const groups = new Map<string, { label: string; income: number; expenses: number }>()
 
   data.incomes.forEach((income) => {
-    const { year, month, day } = getDateParts(income.date)
-    const key = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    const { year, month } = getDateParts(income.date)
+    const key = `${year}-${String(month).padStart(2, '0')}`
     const current = groups.get(key) ?? {
-      label: `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}`,
+      label: formatMonthLabel(`${key}-01`),
       income: 0,
       expenses: 0,
     }
@@ -59,10 +65,10 @@ function buildTimeline(data: AnalyticsResponse) {
 
   data.expenses.forEach((expense) => {
     const timelineDate = resolveExpenseTimelineDate(expense)
-    const { year, month, day } = getDateParts(timelineDate)
-    const key = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    const { year, month } = getDateParts(timelineDate)
+    const key = `${year}-${String(month).padStart(2, '0')}`
     const current = groups.get(key) ?? {
-      label: `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}`,
+      label: formatMonthLabel(`${key}-01`),
       income: 0,
       expenses: 0,
     }
@@ -373,7 +379,7 @@ export function DashboardPage() {
           <div className="grid gap-6 xl:grid-cols-2">
             <Card className="min-w-0 border-white/40 bg-card/90 shadow-soft">
               <CardHeader>
-                <CardTitle>Ingresos vs gastos del período</CardTitle>
+                <CardTitle>Ingresos vs gastos por mes</CardTitle>
               </CardHeader>
               <CardContent className="h-80 min-w-0">
                 {timeline.length === 0 ? (
@@ -447,7 +453,7 @@ export function DashboardPage() {
 
             <Card className="min-w-0 border-white/40 bg-card/90 shadow-soft">
               <CardHeader>
-                <CardTitle>Tendencia de Gastos</CardTitle>
+                <CardTitle>Tendencia mensual de gastos</CardTitle>
               </CardHeader>
               <CardContent className="h-80 min-w-0">
                 {timeline.length === 0 ? (
@@ -515,6 +521,9 @@ export function DashboardPage() {
               </CardContent>
             </Card>
 
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-2">
             <Card className="min-w-0 border-white/40 bg-card/90 shadow-soft">
               <CardHeader>
                 <CardTitle>Uso de Tarjetas de Crédito</CardTitle>
@@ -559,43 +568,6 @@ export function DashboardPage() {
                     )}
                   </ChartFrame>
                 )}
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
-            <Card className="border-white/40 bg-card/90 shadow-soft">
-              <CardHeader>
-                <CardTitle>Gastos Recientes</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {summary.recentExpenses.map((expense) => (
-                  <div
-                    key={expense.id}
-                    className="flex flex-col gap-3 rounded-3xl border border-border/70 bg-background/60 p-4 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="size-3 rounded-full"
-                        style={{ backgroundColor: expense.categoryColor }}
-                      />
-                      <div>
-                        <p className="font-medium">{expense.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {expense.categoryName} • {formatDate(expense.date)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline">
-                        {PAYMENT_METHOD_LABELS[expense.paymentMethod]}
-                      </Badge>
-                      <p className="font-semibold text-destructive">
-                        -{formatCurrency(expense.amount, summary.currency)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
               </CardContent>
             </Card>
 
@@ -652,6 +624,41 @@ export function DashboardPage() {
               </CardContent>
             </Card>
           </div>
+
+          <Card className="border-white/40 bg-card/90 shadow-soft">
+            <CardHeader>
+              <CardTitle>Gastos Recientes</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {summary.recentExpenses.map((expense) => (
+                <div
+                  key={expense.id}
+                  className="flex flex-col gap-3 rounded-3xl border border-border/70 bg-background/60 p-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="size-3 rounded-full"
+                      style={{ backgroundColor: expense.categoryColor }}
+                    />
+                    <div>
+                      <p className="font-medium">{expense.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {expense.categoryName} • {formatDate(expense.date)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline">
+                      {PAYMENT_METHOD_LABELS[expense.paymentMethod]}
+                    </Badge>
+                    <p className="font-semibold text-destructive">
+                      -{formatCurrency(expense.amount, summary.currency)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>
