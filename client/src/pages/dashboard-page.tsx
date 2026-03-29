@@ -76,6 +76,27 @@ function buildTimeline(data: AnalyticsResponse) {
     .map(([, value]) => value)
 }
 
+function buildSpendingOverview(data: AnalyticsResponse) {
+  const totalIncome = data.incomes.reduce((sum, income) => sum + income.amount, 0)
+  const totalExpenses = data.expenses.reduce((sum, expense) => sum + expense.amount, 0)
+  const available = Math.max(totalIncome - totalExpenses, 0)
+
+  return [
+    {
+      id: 'expenses',
+      name: 'Gastos',
+      total: totalExpenses,
+      color: 'var(--color-chart-1)',
+    },
+    {
+      id: 'available',
+      name: 'Disponible',
+      total: available,
+      color: 'var(--color-chart-2)',
+    },
+  ].filter((entry) => entry.total > 0)
+}
+
 const chartAxisProps = {
   axisLine: { stroke: 'var(--color-border)' },
   tickLine: { stroke: 'var(--color-border)' },
@@ -247,6 +268,14 @@ export function DashboardPage() {
     }
 
     return buildTimeline(analytics)
+  }, [analytics])
+
+  const spendingOverview = useMemo(() => {
+    if (!analytics) {
+      return []
+    }
+
+    return buildSpendingOverview(analytics)
   }, [analytics])
 
   if (loadingSummary || !summary) {
@@ -442,6 +471,44 @@ export function DashboardPage() {
                           dot={{ fill: 'var(--color-chart-1)' }}
                         />
                       </LineChart>
+                    )}
+                  </ChartFrame>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className="min-w-0 border-white/40 bg-card/90 shadow-soft">
+              <CardHeader>
+                <CardTitle>Gastos vs disponible</CardTitle>
+              </CardHeader>
+              <CardContent className="h-80 min-w-0">
+                {spendingOverview.length === 0 ? (
+                  <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                    No hay datos suficientes en este período
+                  </div>
+                ) : (
+                  <ChartFrame>
+                    {({ width, height }) => (
+                      <PieChart width={width} height={height}>
+                        <Pie
+                          data={spendingOverview}
+                          dataKey="total"
+                          nameKey="name"
+                          innerRadius={70}
+                          outerRadius={110}
+                          label={renderPieLabel}
+                        >
+                          {spendingOverview.map((entry) => (
+                            <Cell key={entry.id} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          {...chartTooltipProps}
+                          formatter={(value) =>
+                            formatCurrency(Number(value ?? 0), summary.currency)
+                          }
+                        />
+                      </PieChart>
                     )}
                   </ChartFrame>
                 )}
