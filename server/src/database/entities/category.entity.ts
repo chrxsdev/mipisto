@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  OneToMany,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { AppBaseEntity } from './base.entity';
 import { Expense } from './expense.entity';
 import { User } from './user.entity';

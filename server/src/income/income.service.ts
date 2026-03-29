@@ -46,7 +46,9 @@ export class IncomeService {
   }
 
   async update(userId: string, id: string, dto: IncomeDto) {
-    const income = await this.incomeRepository.findOne({ where: { id, userId } });
+    const income = await this.incomeRepository.findOne({
+      where: { id, userId },
+    });
 
     if (!income) {
       throw new NotFoundException('Ingreso no encontrado');
@@ -64,7 +66,9 @@ export class IncomeService {
   }
 
   async remove(userId: string, id: string) {
-    const income = await this.incomeRepository.findOne({ where: { id, userId } });
+    const income = await this.incomeRepository.findOne({
+      where: { id, userId },
+    });
 
     if (!income) {
       throw new NotFoundException('Ingreso no encontrado');

@@ -86,7 +86,10 @@ export class AnalyticsService {
       );
     });
 
-    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+    const totalExpenses = expenses.reduce(
+      (sum, expense) => sum + expense.amount,
+      0,
+    );
     const categoryTotals = new Map<
       string,
       { id: string; name: string; color: string; total: number }
@@ -123,14 +126,15 @@ export class AnalyticsService {
       ...filteredIncomes.map((income) => income.date),
     ].sort((left, right) => left.getTime() - right.getTime());
 
-    const fallbackRange = query.month && query.year
-      ? getMonthRange(query.month, query.year)
-      : query.year
-        ? {
-            start: new Date(query.year, 0, 1),
-            end: new Date(query.year, 11, 31, 23, 59, 59, 999),
-          }
-        : { start: new Date(), end: new Date() };
+    const fallbackRange =
+      query.month && query.year
+        ? getMonthRange(query.month, query.year)
+        : query.year
+          ? {
+              start: new Date(query.year, 0, 1),
+              end: new Date(query.year, 11, 31, 23, 59, 59, 999),
+            }
+          : { start: new Date(), end: new Date() };
 
     return {
       startDate: filteredDates[0] ?? fallbackRange.start,

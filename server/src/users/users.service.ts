@@ -31,11 +31,7 @@ export class UsersService {
     }
   }
 
-  async createUser(input: {
-    email: string;
-    password: string;
-    name: string;
-  }) {
+  async createUser(input: { email: string; password: string; name: string }) {
     await this.ensureEmailAvailable(input.email);
 
     const user = this.usersRepository.create({

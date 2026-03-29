@@ -54,7 +54,9 @@ export class CreditCardsService {
       .andWhere('expense.paymentMethod = :paymentMethod', {
         paymentMethod: PaymentMethod.CREDIT,
       })
-      .andWhere('expense.creditCardId = :creditCardId', { creditCardId: card.id })
+      .andWhere('expense.creditCardId = :creditCardId', {
+        creditCardId: card.id,
+      })
       .andWhere('expense.date >= :cycleStart', { cycleStart })
       .andWhere('expense.date < :cycleEnd', { cycleEnd })
       .getRawOne<{ total: string }>();

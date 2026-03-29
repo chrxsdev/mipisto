@@ -104,7 +104,10 @@ export class CategoriesService {
 
   async ensureCategoryOwnership(userId: string, categoryId: string) {
     const category = await this.categoriesRepository.findOne({
-      where: [{ id: categoryId, userId }, { id: categoryId, userId: IsNull() }],
+      where: [
+        { id: categoryId, userId },
+        { id: categoryId, userId: IsNull() },
+      ],
     });
 
     if (!category) {

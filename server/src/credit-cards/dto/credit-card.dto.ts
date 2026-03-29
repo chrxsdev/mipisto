@@ -1,4 +1,13 @@
-import { IsBoolean, IsNumber, IsOptional, IsString, Matches, Max, Min, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Matches,
+  Max,
+  Min,
+  MinLength,
+} from 'class-validator';
 
 export class CreditCardDto {
   @IsString()
